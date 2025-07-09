@@ -265,14 +265,14 @@ if uploaded_file:
 
         # Λήψη Excel μόνο με Στατιστικά
         output_stats = BytesIO()
-        stats_df.to_excel(output_stats, index=False, sheet_name='Στατιστικά')
+# stats_df.to_excel(output_stats, index=False, sheet_name='Στατιστικά')
         st.download_button(
-            label="📥 Λήψη Excel μόνο με Στατιστικά",
+# label="📥 Λήψη Excel μόνο με Στατιστικά",
             data=output_stats.getvalue(),
             file_name="Monon_Statistika.xlsx"
         )
 
-    if st.button("📌 Τελική Κατανομή Μαθητών (μετά τα 8 Βήματα)"):
+# if st.button("📌 Τελική Κατανομή Μαθητών (μετά τα 8 Βήματα)"):
         df, num_classes = calculate_class_distribution(df)
         st.session_state["df"] = df
         st.session_state["num_classes"] = num_classes
@@ -285,46 +285,46 @@ if uploaded_file:
         df = st.session_state["df"]
         num_classes = st.session_state["num_classes"]
 
-        if st.button("🔹 Βήμα 1: Κατανομή Παιδιών Εκπαιδευτικών"):
+# if st.button("🔹 Βήμα 1: Κατανομή Παιδιών Εκπαιδευτικών"):
             df = assign_teacher_children(df, num_classes)
             st.session_state["df"] = df
             st.success("✅ Ολοκληρώθηκε η κατανομή παιδιών εκπαιδευτικών.")
             st.dataframe(df[df['ΚΛΕΙΔΩΜΕΝΟΣ'] == True])
 
-        if st.button("🔹 Βήμα 2: Κατανομή Ζωηρών Μαθητών"):
+# if st.button("🔹 Βήμα 2: Κατανομή Ζωηρών Μαθητών"):
             df = assign_energetic_students(df, num_classes)
             st.session_state["df"] = df
             st.success("✅ Ολοκληρώθηκε η κατανομή ζωηρών μαθητών.")
             st.dataframe(df[df['ΚΛΕΙΔΩΜΕΝΟΣ'] == True])
 
-        if st.button("🔹 Βήμα 3: Κατανομή Παιδιών με Ιδιαιτερότητες"):
+# if st.button("🔹 Βήμα 3: Κατανομή Παιδιών με Ιδιαιτερότητες"):
             class_assignments = {i: list(df[df['ΤΜΗΜΑ'] == f'Τμήμα {i+1}']['ΟΝΟΜΑΤΕΠΩΝΥΜΟ']) for i in range(num_classes)}
             df = assign_special_needs_students(df, class_assignments, num_classes)
             st.session_state["df"] = df
             st.success("✅ Ολοκληρώθηκε η κατανομή παιδιών με ιδιαιτερότητες.")
             st.dataframe(df[df['ΙΔΙΑΙΤΕΡΟΤΗΤΑ'] == 'Ν'])
 
-        if st.button("🔹 Βήμα 4: Φίλοι Παιδιών των Βημάτων 1–3"):
+# if st.button("🔹 Βήμα 4: Φίλοι Παιδιών των Βημάτων 1–3"):
             df = assign_friends_of_locked(df, num_classes)
             st.session_state["df"] = df
             st.success("✅ Ολοκληρώθηκε η κατανομή φίλων των παιδιών των πρώτων βημάτων.")
             st.dataframe(df[df['ΚΛΕΙΔΩΜΕΝΟΣ'] == True])
 
     
-        if st.button("🔹 Βήμα 7: Υπόλοιποι Μαθητές Χωρίς Φιλίες"):
+# if st.button("🔹 Βήμα 7: Υπόλοιποι Μαθητές Χωρίς Φιλίες"):
             df = assign_remaining_students(df, num_classes)
             st.session_state['df'] = df
             st.success("✅ Ολοκληρώθηκε η τοποθέτηση των υπολοίπων μαθητών χωρίς φιλίες.")
             st.dataframe(df[df['ΚΛΕΙΔΩΜΕΝΟΣ'] == True])
 
-        if st.button("🔹 Βήμα 8: Έλεγχος Ποιοτικών Χαρακτηριστικών & Διορθώσεις"):
+# if st.button("🔹 Βήμα 8: Έλεγχος Ποιοτικών Χαρακτηριστικών & Διορθώσεις"):
             df = balance_qualities(df, num_classes)
             st.session_state['df'] = df
             st.success("✅ Ολοκληρώθηκε ο έλεγχος και οι διορθώσεις για τα ποιοτικά χαρακτηριστικά.")
             st.dataframe(df)
 
     
-        if st.button("🔹 Βήμα 9: Τελικός Έλεγχος & Στατιστικά Τάξεων"):
+# if st.button("🔹 Βήμα 9: Τελικός Έλεγχος & Στατιστικά Τάξεων"):
             step7_8_quality_check(df, num_classes)
             show_statistics_table(df, num_classes)
 
@@ -344,7 +344,7 @@ if uploaded_file:
 
 
 # --- Βήμα 7: Υπόλοιποι Μαθητές Χωρίς Φιλίες ---
- Υπόλοιποι Μαθητές Χωρίς Φιλίες ---
+# Υπόλοιποι Μαθητές Χωρίς Φιλίες ---
 def assign_remaining_students(df, num_classes):
     remaining = df[(df['ΚΛΕΙΔΩΜΕΝΟΣ'] == False) & (df['ΤΜΗΜΑ'].isna())]
     for index, row in remaining.iterrows():
@@ -475,11 +475,11 @@ def show_statistics_table(df, num_classes):
     st.subheader("📊 Πίνακας Στατιστικών Ανά Τμήμα")
     st.dataframe(stats_df)
 
-    if st.button("📥 Λήψη Excel με Κατανομή και Στατιστικά"):
+# if st.button("📥 Λήψη Excel με Κατανομή και Στατιστικά"):
         output = BytesIO()
         with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
             df.to_excel(writer, sheet_name='Κατανομή', index=False)
-            stats_df.to_excel(writer, sheet_name='Στατιστικά', index=False)
+# stats_df.to_excel(writer, sheet_name='Στατιστικά', index=False)
         st.download_button(
             label="⬇️ Κατεβάστε το Αρχείο Excel",
             data=output.getvalue(),
